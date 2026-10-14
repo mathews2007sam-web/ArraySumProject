@@ -1,0 +1,26 @@
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Build and Test') {
+            steps {
+                bat 'mvn -B clean verify'
+            }
+        }
+    }
+
+    post {
+        always {
+            junit 'target/surefire-reports/*.xml'
+        }
+
+        success {
+            echo 'Build and JUnit tests passed!'
+        }
+
+        failure {
+            echo 'Build failed. Check the console output.'
+        }
+    }
+}
